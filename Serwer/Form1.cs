@@ -15,7 +15,7 @@ namespace Serwer
     public partial class MainWindow : Form
     {
 
-        HttpServer server = new HttpServer();
+        Server server = new Server();
 
         private bool mouseDown;
         private Point lastLocation;

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Security.Principal;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Serwer
 {
-    public class HttpServer : INotifyPropertyChanging, INotifyPropertyChanged
+    public class Server : INotifyPropertyChanging, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -47,7 +48,7 @@ namespace Serwer
             {
                 // Oczekiwanie na połączenie
                 HttpListenerContext ctx = await listener.GetContextAsync();
-                users.Add(User());
+                
 
                 // obiekty request i response
                 HttpListenerRequest req = ctx.Request;
@@ -78,6 +79,14 @@ namespace Serwer
                 resp.ContentEncoding = Encoding.UTF8;
                 resp.ContentLength64 = data.LongLength;
                 resp.KeepAlive = false;
+
+                List<User> foundUsers = (from User in users
+                            where User.UserIP == ctx.Request.RemoteEndPoint.Address
+                            select User).ToList();
+                int thisUserID = foundUsers[0].ContactID;
+
+
+                users.Add(new User(ctx.Request.RemoteEndPoint.Address, "test", DateTime.Now, User.Status.Online));
 
                 // Write out to the response stream (asynchronously), then close it
                 await resp.OutputStream.WriteAsync(data, 0, data.Length);
