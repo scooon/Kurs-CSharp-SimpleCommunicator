@@ -1,0 +1,11 @@
+C:\Users\Scooon\Documents\Kursy\C#\Server\bin\Release\Server.exe.config
+C:\Users\Scooon\Documents\Kursy\C#\Server\bin\Release\Server.exe
+C:\Users\Scooon\Documents\Kursy\C#\Server\bin\Release\Server.pdb
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.Properties.Resources.resources
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.csproj.GenerateResource.cache
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.csproj.CoreCompileInputs.cache
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.exe
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.pdb
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.csprojAssemblyReference.cache
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Interop.NetFwTypeLib.dll
+C:\Users\Scooon\Documents\Kursy\C#\Server\obj\Release\Server.csproj.ResolveComReference.cache
