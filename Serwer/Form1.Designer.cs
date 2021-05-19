@@ -60,18 +60,18 @@ namespace Serwer
             // 
             this.Views.AutoSize = true;
             this.Views.Font = new System.Drawing.Font("Segoe Print", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Views.Location = new System.Drawing.Point(12, 87);
+            this.Views.Location = new System.Drawing.Point(125, 152);
             this.Views.Name = "Views";
-            this.Views.Size = new System.Drawing.Size(97, 33);
+            this.Views.Size = new System.Drawing.Size(29, 33);
             this.Views.TabIndex = 2;
-            this.Views.Text = "Views: 0";
+            this.Views.Text = "0";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DodgerBlue;
-            this.ClientSize = new System.Drawing.Size(369, 120);
+            this.ClientSize = new System.Drawing.Size(401, 323);
             this.Controls.Add(this.Views);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);

@@ -80,14 +80,30 @@ namespace Serwer
                 resp.ContentLength64 = data.LongLength;
                 resp.KeepAlive = false;
 
-                List<User> foundUsers = (from User in users
-                            where User.UserIP == ctx.Request.RemoteEndPoint.Address
-                            select User).ToList();
-                int thisUserID = foundUsers[0].ContactID;
+                int thisUserIndex = -1;
+                
+                try
+                {
 
+                    User thisUser = users.First(i => i.UserIP.ToString() == ctx.Request.RemoteEndPoint.Address.ToString());
+                    thisUserIndex = users.IndexOf(thisUser);
+                    thisUser.LastOnline = DateTime.Now;
+                    thisUser.UserStatus = User.Status.NotDisturb;
+                    thisUser.Username = "test2";
+                    users[thisUserIndex] = thisUser;
+                }
+                catch
+                {
+                    if (thisUserIndex == -1)
+                    {
+                        users.Add(new User(ctx.Request.RemoteEndPoint.Address, "test", DateTime.Now, User.Status.Online));
+                    }
+                }
 
-                users.Add(new User(ctx.Request.RemoteEndPoint.Address, "test", DateTime.Now, User.Status.Online));
-
+                
+                
+                                   
+                
                 // Write out to the response stream (asynchronously), then close it
                 await resp.OutputStream.WriteAsync(data, 0, data.Length);
                
