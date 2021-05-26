@@ -18,7 +18,8 @@ namespace Serwer
         private List<User> users = new List<User>();
 
         public HttpListener listener;
-        public  string url = "http://*:8000/";
+        private int _port;
+        public string url = "http://*:8000/";
         private int pageViews = 0;
         public int requestCount = 0;
         public string pageData =
@@ -39,6 +40,17 @@ namespace Serwer
             "  </body>" +
             "</html>";
 
+        public Server(int port)
+        {
+            url = "http://*:" + port + "/";
+        }
+
+        public int Port{
+            get
+            {
+                return _port;
+            }
+        }
 
         public async Task HandleIncomingConnections()
         {

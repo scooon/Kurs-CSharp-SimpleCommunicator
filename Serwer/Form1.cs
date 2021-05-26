@@ -15,7 +15,7 @@ namespace Serwer
     public partial class MainWindow : Form
     {
 
-        Server server = new Server();
+        Server server = new Server(8000);
 
         private bool mouseDown;
         private Point lastLocation;
@@ -28,28 +28,9 @@ namespace Serwer
 
             try
             {
+                addFirewallRule(server.Port);
+                addFirewallRule(5000);
 
-                Type tNetFwPolicy2 = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
-                INetFwPolicy2 fwPolicy2 = (INetFwPolicy2)Activator.CreateInstance(tNetFwPolicy2);
-                var currentProfiles = fwPolicy2.CurrentProfileTypes;
-
-                // Let's create a new rule
-                INetFwRule2 inboundRule = (INetFwRule2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-                inboundRule.Enabled = true;
-                //Allow through firewall
-                inboundRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-                //Using protocol TCP
-                inboundRule.Protocol = 6; // TCP
-                                          //Port 81
-                inboundRule.LocalPorts = "8000";
-                //Name of rule
-                inboundRule.Name = "MyRule";
-                // ...//
-                inboundRule.Profiles = currentProfiles;
-
-                // Now add the rule
-                INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
-                firewallPolicy.Rules.Add(inboundRule);
             }
             catch 
             {
@@ -58,14 +39,22 @@ namespace Serwer
 
 
             
-
+            // API
             server.listener = new System.Net.HttpListener();
             server.listener.Prefixes.Add(server.url);
             server.listener.Start();
 
-            Console.WriteLine("Nasłuchiwanie Adresu {0}", server.url);
+            Console.WriteLine("Nasłuchiwanie Adresu {0} - API", server.url);
 
-            Task listen = server.HandleIncomingConnections();
+            Task listenServer = server.HandleIncomingConnections();
+
+            string appPath = Application.StartupPath + "public_html\\";
+            App.StartHttpServerOnThread(appPath, 5000);
+
+           
+
+
+
             //listen.GetAwaiter().GetResult();
 
             //server.listener.Close();
@@ -76,7 +65,30 @@ namespace Serwer
             
         }
 
+        private void addFirewallRule(int port)
+        {
+            Type tNetFwPolicy2 = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
+            INetFwPolicy2 fwPolicy2 = (INetFwPolicy2)Activator.CreateInstance(tNetFwPolicy2);
+            var currentProfiles = fwPolicy2.CurrentProfileTypes;
 
+            // Let's create a new rule
+            INetFwRule2 inboundRule = (INetFwRule2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
+            inboundRule.Enabled = true;
+            //Allow through firewall
+            inboundRule.Action = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
+            //Using protocol TCP
+            inboundRule.Protocol = 6; // TCP
+                                      //Port 81
+            inboundRule.LocalPorts = port.ToString();
+            //Name of rule
+            inboundRule.Name = "SimpleCommunicator " + port;
+            // ...//
+            inboundRule.Profiles = currentProfiles;
+
+            // Now add the rule
+            INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
+            firewallPolicy.Rules.Add(inboundRule);
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
