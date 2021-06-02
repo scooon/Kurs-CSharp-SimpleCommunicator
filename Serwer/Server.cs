@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Security.Principal;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Serwer
 {
@@ -14,6 +15,8 @@ namespace Serwer
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
+
+        private ServerInfo Info = new ServerInfo();
 
         private List<User> users = new List<User>();
 
@@ -45,7 +48,8 @@ namespace Serwer
             url = "http://*:" + port + "/";
         }
 
-        public int Port{
+        public int Port
+        {
             get
             {
                 return _port;
@@ -60,7 +64,7 @@ namespace Serwer
             {
                 // Oczekiwanie na połączenie
                 HttpListenerContext ctx = await listener.GetContextAsync();
-                
+
 
                 // obiekty request i response
                 HttpListenerRequest req = ctx.Request;
@@ -86,14 +90,13 @@ namespace Serwer
 
                 // Write the response info
                 string disableSubmit = !runServer ? "disabled" : "";
-                byte[] data = Encoding.UTF8.GetBytes(String.Format(pageData, pageViews, Dns.GetHostName(), ctx.Request.RemoteEndPoint.Address.ToString(), req.UserHostName, getusername() ,disableSubmit));
-                resp.ContentType = "text/html";
-                resp.ContentEncoding = Encoding.UTF8;
-                resp.ContentLength64 = data.LongLength;
-                resp.KeepAlive = false;
+                //byte[] data = Encoding.UTF8.GetBytes(String.Format(pageData, pageViews, Dns.GetHostName(), ctx.Request.RemoteEndPoint.Address.ToString(), req.UserHostName, getusername() ,disableSubmit));
+
+
+
 
                 int thisUserIndex = -1;
-                
+
                 try
                 {
 
@@ -108,24 +111,40 @@ namespace Serwer
                 {
                     if (thisUserIndex == -1)
                     {
-                        users.Add(new User(ctx.Request.RemoteEndPoint.Address, "test", DateTime.Now, User.Status.Online));
+                        Random rand = new Random();
+                        string newUsername = "User" + rand.Next(0, 1000);
+
+                        while (users.Count(i => i.Username == newUsername) != 0)
+                        {
+                            newUsername = "User" + rand.Next(0, 1000);
+                        }
+
+                        users.Add(new User(ctx.Request.RemoteEndPoint.Address, newUsername, DateTime.Now, User.Status.Online));
+                        User thisUser = users.First(i => i.UserIP.ToString() == ctx.Request.RemoteEndPoint.Address.ToString());
+                        thisUserIndex = users.IndexOf(thisUser);
                     }
                 }
 
-                
-                
-                                   
-                
+
+                Info.MyUsername = users[thisUserIndex].Username;
+                Info.ServerName = getusername();
+                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Info));
+                resp.ContentType = "application/json";
+                resp.ContentEncoding = Encoding.UTF8;
+                resp.ContentLength64 = data.LongLength;
+                resp.KeepAlive = false;
+
+
                 // Write out to the response stream (asynchronously), then close it
                 await resp.OutputStream.WriteAsync(data, 0, data.Length);
-               
-                
+
+
 
                 resp.Close();
             }
         }
 
-        public int Views 
+        public int Views
         {
             get { return pageViews; }
             set
@@ -140,7 +159,7 @@ namespace Serwer
                     SendPropertyChanged("Name");
                 }
 
-                
+
 
             }
         }
@@ -162,16 +181,16 @@ namespace Serwer
 
         public async Task clientUpdate()
         {
-            
+
         }
 
-        private string getusername() 
+        private string getusername()
         {
-                System.Security.Principal.WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            System.Security.Principal.WindowsIdentity identity = WindowsIdentity.GetCurrent();
 
             string Name = identity.Name;
 
-            return Name.Substring(Name.IndexOf("\\")+1);
+            return Name.Substring(Name.IndexOf("\\") + 1);
         }
 
     }

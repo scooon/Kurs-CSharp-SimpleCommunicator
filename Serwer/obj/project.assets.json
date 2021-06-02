@@ -1267,6 +1267,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "Newtonsoft.Json >= 13.0.1",
       "Westwind.Utilities >= 3.0.58"
     ]
   },
@@ -1277,9 +1278,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\Server.csproj",
-      "projectName": "Server",
-      "projectPath": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\Serwer.csproj",
+      "projectName": "Serwer",
+      "projectPath": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\Serwer.csproj",
       "packagesPath": "C:\\Users\\Scooon\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\obj\\",
       "projectStyle": "PackageReference",
@@ -1312,6 +1313,10 @@
     "frameworks": {
       "netcoreapp3.1": {
         "dependencies": {
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.1, )"
+          },
           "Westwind.Utilities": {
             "target": "Package",
             "version": "[3.0.58, )"

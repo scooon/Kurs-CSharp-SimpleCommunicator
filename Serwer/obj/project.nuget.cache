@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RHcMJ/1Do5nIc2BvDx9ZO3WpeEJYAgttDUTJ2wJwajrUgq8Lt3buoqTljrkyD7NxyJJWJbMFnsqs1+VEiYkG7g==",
+  "dgSpecHash": "avk5GLdBraopWYj+hBiKsvppqivqZxVUJOZWOJjfJCMq5evGpQDILYNnYuZlkTHS3yWrURBBsy8l1T8bmlcw0Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\Server.csproj",
+  "projectFilePath": "C:\\Users\\Scooon\\Documents\\Kursy\\C#\\Kurs-CSharp-SimpleCommunicator\\Serwer\\Serwer.csproj",
   "expectedPackageFiles": [
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Scooon\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.2\\microsoft.data.sqlclient.2.1.2.nupkg.sha512",
