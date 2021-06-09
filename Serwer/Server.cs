@@ -103,8 +103,8 @@ namespace Serwer
                     User thisUser = users.First(i => i.UserIP.ToString() == ctx.Request.RemoteEndPoint.Address.ToString());
                     thisUserIndex = users.IndexOf(thisUser);
                     thisUser.LastOnline = DateTime.Now;
-                    thisUser.UserStatus = User.Status.NotDisturb;
-                    thisUser.Username = "test2";
+                    //thisUser.UserStatus = User.Status.NotDisturb;
+                    //thisUser.Username = "test2";
                     users[thisUserIndex] = thisUser;
                 }
                 catch
@@ -125,10 +125,43 @@ namespace Serwer
                     }
                 }
 
+                byte[] data = Encoding.UTF8.GetBytes("{\"error\": \"Bad API request\"}");
 
-                Info.MyUsername = users[thisUserIndex].Username;
-                Info.ServerName = getusername();
-                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Info));
+                if ((req.HttpMethod == "GET") && (req.Url.AbsolutePath == "/"))
+                {
+                    Info.MyUsername = users[thisUserIndex].Username;
+                    Info.Status = users[thisUserIndex].UserStatus;
+                    Info.ServerName = getusername();
+                    data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Info));
+                }
+                else if ((req.HttpMethod == "GET") && (req.Url.AbsolutePath == "/set/") && (req.QueryString.AllKeys.Contains("username")))
+                {
+                    int id = Array.FindIndex(req.QueryString.AllKeys, u => u == "username");
+                    users[thisUserIndex].Username = req.QueryString[id];
+                    data = Encoding.UTF8.GetBytes("{\"info\": \"Username changed to: " + users[thisUserIndex].Username + "\"}");
+                }
+                else if ((req.HttpMethod == "GET") && (req.Url.AbsolutePath == "/set/") && (req.QueryString.AllKeys.Contains("status")))
+                {
+                    int id = Array.FindIndex(req.QueryString.AllKeys, u => u == "status");
+                    users[thisUserIndex].UserStatus = (User.Status)Int16.Parse(req.QueryString[id]);
+                    data = Encoding.UTF8.GetBytes("{\"info\": \"Status changed to: " + users[thisUserIndex].UserStatus + "\"}");
+                }
+                else if ((req.HttpMethod == "GET") && (req.Url.AbsolutePath == "/getUsers/"))
+                {
+                    try
+                    {
+                        List<string> usr = new List<string>();
+                        usr = users.Select(o => o.Username).ToList();
+                        data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(usr));
+                        // Do dokonczenia nie działa!
+                    }
+                    catch
+                    {
+                        
+                        data = Encoding.UTF8.GetBytes("{\"error\": \"Users retrieve error\"}");
+                    }
+                }
+
                 resp.ContentType = "application/json";
                 resp.ContentEncoding = Encoding.UTF8;
                 resp.ContentLength64 = data.LongLength;

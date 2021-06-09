@@ -4,10 +4,11 @@ using System.Text;
 
 namespace Serwer
 {
-    public class ServerInfo
+    class ServerInfo
     {
         private string _ServerName = "";
         private string _MyUsername = "";
+        private User.Status _Status = User.Status.Online;
         public string ServerName
         {
             get
@@ -31,6 +32,19 @@ namespace Serwer
             set
             {
                 _MyUsername = value;
+            }
+        }
+
+        public User.Status Status
+        {
+            get
+            {
+                return _Status;
+            }
+
+            set
+            {
+                _Status = value;
             }
         }
     }
